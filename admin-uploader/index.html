@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Post Uploader</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 24px; max-width: 900px; line-height: 1.5; }
+    h1 { margin: 0 0 16px; }
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .full { grid-column: 1 / -1; }
+    label { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .75; display: block; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid rgba(127,127,127,.4); border-radius: 8px; font-size: 14px; }
+    textarea { min-height: 200px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .row { display: contents; }
+    button { background: #2563eb; color: #fff; border: 0; padding: 12px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .muted { font-size: 13px; opacity: .8; }
+    .note { background: rgba(37,99,235,.1); border: 1px solid rgba(37,99,235,.25); padding: 10px 12px; border-radius: 8px; }
+    .error { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.25); padding: 10px 12px; border-radius: 8px; color: #b91c1c; }
+    .success { background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.25); padding: 10px 12px; border-radius: 8px; color: #047857; }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    nav a { color: inherit; text-decoration: none; opacity: .85; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Post Uploader</h1>
+    <nav><a href="/">← Back to site</a></nav>
+  </header>
+
+  <p class="note">Enter your API token and post details. On Publish, a Markdown file will be committed to your repo under <code>/posts/{slug}.md</code>, and Netlify will redeploy automatically.</p>
+
+  <div id="msg" class="muted"></div>
+
+  <form id="postForm">
+    <div class="full">
+      <label for="token">API Token</label>
+      <input id="token" name="token" type="password" placeholder="Enter your API_TOKEN" required />
+    </div>
+
+    <div>
+      <label for="title">Title</label>
+      <input id="title" name="title" type="text" placeholder="e.g., How I built my blog" required />
+    </div>
+
+    <div>
+      <label for="slug">Slug</label>
+      <input id="slug" name="slug" type="text" placeholder="auto-generated from title" />
+    </div>
+
+    <div>
+      <label for="date">Publish Date</label>
+      <input id="date" name="date" type="datetime-local" />
+    </div>
+
+    <div>
+      <label for="category">Category</label>
+      <select id="category" name="category">
+        <option>Technology</option>
+        <option>Lifestyle</option>
+        <option>Travel</option>
+        <option>Health</option>
+        <option>Photography</option>
+        <option>General</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label for="tags">Tags (comma separated)</label>
+      <input id="tags" name="tags" type="text" placeholder="e.g., netlify, cms, blog" />
+    </div>
+
+    <div class="full">
+      <label for="cover">Cover Image URL</label>
+      <input id="cover" name="cover" type="url" placeholder="https://images.unsplash.com/..." />
+    </div>
+
+    <div class="full">
+      <label for="excerpt">Excerpt (2–3 sentences)</label>
+      <textarea id="excerpt" name="excerpt" placeholder="Short summary of your post"></textarea>
+    </div>
+
+    <div class="full">
+      <label for="body">Body (Markdown)</label>
+      <textarea id="body" name="body" placeholder="# Heading&#10;&#10;Your content here..."></textarea>
+    </div>
+
+    <div class="full">
+      <button type="submit">Publish</button>
+      <span class="muted">or</span>
+      <button type="button" id="previewBtn">Preview Markdown</button>
+    </div>
+  </form>
+
+  <div id="preview" class="full" style="margin-top:16px;"></div>
+
+  <script>
+    function toSlug(s) {
+      return (s || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    function isoLocal(date) {
+      // returns YYYY-MM-DDTHH:mm in local time for datetime-local input default
+      const d = date || new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+
+    const titleEl = document.getElementById('title');
+    const slugEl = document.getElementById('slug');
+    const dateEl = document.getElementById('date');
+    const msgEl = document.getElementById('msg');
+    const formEl = document.getElementById('postForm');
+    const previewBtn = document.getElementById('previewBtn');
+    const previewEl = document.getElementById('preview');
+
+    dateEl.value = isoLocal(new Date());
+
+    titleEl.addEventListener('input', () => {
+      if (!slugEl.value || slugEl.dataset.touched !== 'true') {
+        slugEl.value = toSlug(titleEl.value);
+      }
+    });
+    slugEl.addEventListener('input', () => slugEl.dataset.touched = 'true');
+
+    function show(type, text) {
+      msgEl.className = type;
+      msgEl.textContent = text;
+    }
+
+    previewBtn.addEventListener('click', () => {
+      const body = document.getElementById('body').value || '';
+      previewEl.innerHTML = '<div class="note"><strong>Preview (raw Markdown):</strong><pre style="white-space:pre-wrap;">' + body.replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch])) + '</pre></div>';
+    });
+
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      show('muted', 'Publishing…');
+
+      const payload = {
+        token: document.getElementById('token').value.trim(),
+        title: titleEl.value.trim(),
+        slug: (slugEl.value.trim() || toSlug(titleEl.value)).replace(/^-+|-+$/g,''),
+        date: document.getElementById('date').value,
+        category: document.getElementById('category').value,
+        tags: (document.getElementById('tags').value || '').split(',').map(t => t.trim()).filter(Boolean),
+        cover: document.getElementById('cover').value.trim(),
+        excerpt: document.getElementById('excerpt').value.trim(),
+        body: document.getElementById('body').value
+      };
+
+      if (!payload.token) return show('error', 'API token is required.');
+      if (!payload.title) return show('error', 'Title is required.');
+      if (!payload.slug) return show('error', 'Slug is required.');
+
+      try {
+        const res = await fetch('/.netlify/functions/create-post', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          show('error', (data && data.error) ? data.error : 'Failed to publish.');
+          return;
+        }
+        show('success', 'Post published successfully. Deploy will complete in ~30–60 seconds.');
+        formEl.reset();
+        dateEl.value = isoLocal(new Date());
+        previewEl.innerHTML = '';
+      } catch (err) {
+        show('error', 'Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
