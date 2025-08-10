@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John's Blog - Thoughts, Ideas & Experiences</title>
+    <meta name="description" content="Welcome to my personal blog where I share my thoughts on technology, life experiences, and creative pursuits.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__brand">
+                    <h1 class="header__title">John's Blog</h1>
+                    <span class="header__tagline">Thoughts, Ideas & Experiences</span>
+                </div>
+                
+                <nav class="nav desktop-nav">
+                    <ul class="nav__list">
+                        <li class="nav__item"><a href="#home" class="nav__link">Home</a></li>
+                        <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
+                        <li class="nav__item"><a href="#blog" class="nav__link">Blog</a></li>
+                        <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <div class="header__actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav hidden" id="mobileNav">
+            <ul class="mobile-nav__list">
+                <li class="mobile-nav__item"><a href="#home" class="mobile-nav__link">Home</a></li>
+                <li class="mobile-nav__item"><a href="#about" class="mobile-nav__link">About</a></li>
+                <li class="mobile-nav__item"><a href="#blog" class="mobile-nav__link">Blog</a></li>
+                <li class="mobile-nav__item"><a href="#contact" class="mobile-nav__link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero__content">
+                <div class="hero__text">
+                    <h2 class="hero__title">Hi, I'm John Doe</h2>
+                    <p class="hero__description">A passionate writer and developer sharing insights on technology, life, and creativity. Welcome to my corner of the internet where I document my journey and share what I've learned along the way.</p>
+                    <button class="btn btn--primary hero__cta" onclick="document.getElementById('blog').scrollIntoView({behavior: 'smooth'})">
+                        Explore My Blog
+                    </button>
+                </div>
+                <div class="hero__image">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face" alt="John Doe" class="hero__avatar">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="main__layout">
+                <!-- Blog Section -->
+                <section class="blog-section" id="blog">
+                    <div class="blog-header">
+                        <h2 class="blog-header__title">Latest Posts</h2>
+                        
+                        <!-- Search and Filter -->
+                        <div class="blog-controls">
+                            <div class="search-box">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search posts...">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                            
+                            <div class="category-filter">
+                                <select id="categoryFilter" class="form-control">
+                                    <option value="All">All Categories</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Lifestyle">Lifestyle</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Photography">Photography</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Posts Grid -->
+                    <div class="blog-grid" id="blogGrid">
+                        <!-- Posts will be dynamically loaded here -->
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="blog-actions">
+                        <button class="btn btn--outline" id="loadMore">Load More Posts</button>
+                    </div>
+                </section>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- About Card -->
+                    <div class="card sidebar-card" id="about">
+                        <div class="card__header">
+                            <h3>About Me</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="about-card">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="John Doe" class="about-card__avatar">
+                                <h4 class="about-card__name">John Doe</h4>
+                                <p class="about-card__bio">A passionate writer and developer sharing insights on technology, life, and creativity. Based in Chennai, India.</p>
+                                
+                                <div class="social-links">
+                                    <a href="https://twitter.com/johndoe" target="_blank" class="social-link" aria-label="Twitter">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="https://linkedin.com/in/johndoe" target="_blank" class="social-link" aria-label="LinkedIn">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                    <a href="https://github.com/johndoe" target="_blank" class="social-link" aria-label="GitHub">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                    <a href="https://instagram.com/johndoe" target="_blank" class="social-link" aria-label="Instagram">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Signup -->
+                    <div class="card sidebar-card">
+                        <div class="card__header">
+                            <h3>Stay Updated</h3>
+                        </div>
+                        <div class="card__body">
+                            <form class="newsletter-form" id="newsletterForm">
+                                <p>Subscribe to get the latest posts delivered to your inbox.</p>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Your email address" required>
+                                </div>
+                                <button type="submit" class="btn btn--primary btn--full-width">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="card sidebar-card">
+                        <div class="card__header">
+                            <h3>Categories</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="categories-list" id="categoriesList">
+                                <!-- Categories will be dynamically loaded -->
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-header">
+                    <h2>Get In Touch</h2>
+                    <p>Have a question or want to work together? I'd love to hear from you.</p>
+                </div>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactName" class="form-label">Name</label>
+                            <input type="text" id="contactName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail" class="form-label">Email</label>
+                            <input type="email" id="contactEmail" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactSubject" class="form-label">Subject</label>
+                        <input type="text" id="contactSubject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage" class="form-label">Message</label>
+                        <textarea id="contactMessage" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn--primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <h3>John's Blog</h3>
+                    <p>Sharing thoughts, ideas, and experiences with the world.</p>
+                </div>
+                
+                <div class="footer__social">
+                    <a href="https://twitter.com/johndoe" target="_blank" class="footer__social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/johndoe" target="_blank" class="footer__social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/johndoe" target="_blank" class="footer__social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://instagram.com/johndoe" target="_blank" class="footer__social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2025 John's Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <div class="toast__content">
+            <span class="toast__message"></span>
+            <button class="toast__close" aria-label="Close notification">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
